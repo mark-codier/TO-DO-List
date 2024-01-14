@@ -81,7 +81,7 @@ function listItemTemplate ({_id,title,body}){
     dlt_btn.textContent = " Delete";
     const article = document.createElement('p');
     article.textContent = body;
-    article.classList.add('mt-2', 'w-100');
+    article.classList.add('mt-2', 'w-100', 'article');
     // listItem.insertAdjacentElement('beforeend',span)
     // listItem.insertAdjacentElement('beforeend',dlt_btn)
     // listItem.insertAdjacentElement('beforeend',article)
@@ -144,8 +144,7 @@ function renderAllTasks(objOfTasks){
       if(confirmValue){parent.remove()}
     }else if(target.classList.contains('comp')){
       const parent = target.parentElement;
-      console.log(parent);
-      parent.classList.toggle('completed');
+      parent.querySelector('.article').classList.toggle('completed');
       if(parent.classList.contains('completed')){
         parent.classList.add('display-none');
         parent.classList
