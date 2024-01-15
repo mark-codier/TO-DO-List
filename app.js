@@ -31,141 +31,101 @@ const tasks = [
   },
 ];
 
-(function(arrOfTasks){
-  const objOfTasks = arrOfTasks.reduce((acc,task)=>{
+(function(arrOfTasks) {
+  const objOfTasks = arrOfTasks.reduce((acc, task) => {
+    // acc[key] = value;
     acc[task._id] = task;
+    // acc = {
+    //   task._id: 0
+    // }
     return acc;
-  },{});
-  //Element UI - user interface;
-  const listContainer = document.querySelector('.tasks-list-section .list-group')
+  }, {});
+  //Elements UI - user interface;
+  const listContainer = document.querySelector('.tasks-list-section .list-group');
   const form = document.forms['addTask'];
-  const inp_t = form.elements['title'];
-  const inp_b = form.elements['body'];//[квадратные скобки имеются ввиду что ищем по name]
-  //Submit
-form.addEventListener('submit',onSubmitHandler)
-// map filter find foreach reduce some/every//Закрепить////////////////////////////////////////////////////////////////
-listContainer.addEventListener('click',onDeleteHandler);
-const btn1 = document.createElement('button');
-btn1.textContent = "Показать все задачи";
-btn1.classList.add('btn-primary','btn','ml-auto');
-btn1.addEventListener('click',function(){
-  const all = document.querySelectorAll('.completed');
-  all.forEach(el => {el.classList.remove('display-none')})
-  div.textContent = 'все задачи'
-})
-const btn2 = document.createElement('button');
-btn2.textContent = "Показать незавершенные задачи";
-btn2.classList.add('btn-primary','btn','ml-auto');
-btn2.addEventListener('click',function(){
-  const alle = document.querySelectorAll('.completed');
-  alle.forEach(el => {el.classList.add('display-none')})
-  div.textContent = 'Незавершенные задачи'
-});
-const div = document.createElement('div');
-div.classList.add('div','ml-auto','btn-secondary');
-div.textContent = 'Все задачи';
-listContainer.appendChild(btn1);
-listContainer.appendChild(btn2);
-listContainer.appendChild(div)
-renderAllTasks(objOfTasks);
-function listItemTemplate ({_id,title,body}){
+  const inputTitle = form.elements['title'];
+  const inputBody = form.elements['body'];
+  const filterContainer = document.querySelector('.filterContainer');
+
+  //events
+  renderAllTasks(objOfTasks);
+  form.addEventListener('submit', onSubmitHandler);
+  listContainer.addEventListener('click', onDeleteHandler);
+  filterContainer.addEventListener('click', filterTodos);
+
+  function renderAllTasks(objOfTasks) {
+    if (!objOfTasks) {
+      console.error('НЕТ ЗАДАЧ');
+      return;
+    }; //проверка
+    const fragment = document.createDocumentFragment();
+    Object.values(objOfTasks).forEach(task => {
+      const list = listItemTemplate(task);  
+      fragment.appendChild(list);
+    });
+    listContainer.appendChild(fragment);
+  };
+  function listItemTemplate({ _id, title, body }) {
     const listItem = document.createElement('li');
-    listItem.classList.add('list-group-item','d-flex', 'align-items-center', 'flex-wrap','mt-2');
-    listItem.setAttribute('data-task-id',_id);
+    listItem.classList.add('list-group-item', 'd-flex', 'align-items-center', 'flex-wrap', 'mt-2');
+    listItem.setAttribute('data-task-id', _id);
     const span = document.createElement('span');
     span.textContent = title;
-    span.style.fontweight = 'bold';
-    span.style.fontSize = '1.5rem'
-    const dlt_btn = document.createElement('button')
-    dlt_btn.classList.add('btn','btn-danger','ml-auto','delete-btn')
-    dlt_btn.textContent = " Delete";
+    span.style.fontWeight = 'bold';
+    span.style.fontSize = '1.5rem';
+    const deleteBtn = document.createElement('button');
+    deleteBtn.classList.add('btn', 'btn-danger', 'ml-auto', 'delete-btn');
+    //нужно сделать динамичный сборщик классов
+    deleteBtn.textContent = 'Delete task';
     const article = document.createElement('p');
     article.textContent = body;
     article.classList.add('mt-2', 'w-100');
-    // listItem.insertAdjacentElement('beforeend',span)
-    // listItem.insertAdjacentElement('beforeend',dlt_btn)
-    // listItem.insertAdjacentElement('beforeend',article)
-    const comp_btn = document.createElement('button');
-    comp_btn.classList.add('btn','comp','ml-auto','btn-success');
-    comp_btn.textContent = 'Complete';
+    // 1rem = 16px;
     listItem.appendChild(span);
-    listItem.appendChild(dlt_btn);
+    listItem.appendChild(deleteBtn);
     listItem.appendChild(article);
-    listItem.appendChild(comp_btn);
     return listItem;
-    //1rem = 16px
-    //Нужно сделать динамичный сборщик классов
-}
-function renderAllTasks(objOfTasks){
-  if(!objOfTasks){
-    console.log('Нет задач');
-    return;
-  }//Проверка на наличие обьектов
-  const fragment = document.createDocumentFragment();
-  Object.values(objOfTasks).forEach(task =>{
-    const list = listItemTemplate(task);
-    fragment.appendChild(list);
-  });listContainer.appendChild(fragment);
   }
-
-  function onSubmitHandler(e){
+  function onSubmitHandler(e) {
     e.preventDefault();
-    const titleValue = inp_t.value;
-    const bodyValue = inp_b.value;
-    if(!titleValue || !bodyValue){alert('Козел'); return;}
-    const listItem = createTask(titleValue,bodyValue);
-    const bla = listItemTemplate(listItem);
-    listContainer.insertAdjacentElement('afterbegin',bla);
-    form.reset()
+    const titleValue = inputTitle.value;
+    const bodyValue = inputBody.value;
+    if (!titleValue || !bodyValue) {
+      alert('Введите пж инпуты');
+      return;
+    };
+    //проверка
+    const listItem = createTask(titleValue, bodyValue);
+    const created = listItemTemplate(listItem);
+    listContainer.insertAdjacentElement('afterbegin', created);
+    form.reset();
   }
-  function createTask(title,bod){
+  function createTask(title, body) {
     const newTask = {
-      title,//ПО СИНТАКСИСУ ЕСЛИ ЗНАЧЕНИЕ И ПОЛЕ СОВПАДАЕТ ТО МОЖНО ЗАПИСЫВАТЬ ВОТ ТАК
-      body:bod,
-      _id:`task-${Math.random()}`,
+      title,
+      body,
       completed: false,
+      _id: `task-${Math.random()}`,
     }
     objOfTasks[newTask._id] = newTask;
-    return {...newTask};
+    return { ...newTask };
   }
-  function deleteTask(id){
-    const {title} = objOfTasks[id];
-    const isConfirm = confirm(`Вы искренне уверены в своем пожелании удалить из этого мира ${title}`);
-    if(!isConfirm){return;};
+  function deleteTask(id) {
+    const { title } = objOfTasks[id];
+    const isConfirm = confirm(`Вы правда хотите удалить [${title}]?`);
+    if(!isConfirm) return;
     delete objOfTasks[id];
     return isConfirm;
-  }
-  console.log(objOfTasks)
-  function onDeleteHandler({target}){
-    if(target.classList.contains('delete-btn')){
+}
+  function onDeleteHandler({ target }) {
+    if(target.classList.contains('delete-btn')) {
       const parent = target.parentElement;
       const id = parent.dataset.taskId;
-      const confirmValue =  deleteTask(id);
-      if(confirmValue){parent.remove()}
-    }else if(target.classList.contains('comp')){
-      const parent = target.parentElement;
-      console.log(parent);
-      parent.classList.toggle('completed');
-      if(parent.classList.contains('completed')){
-        parent.classList.add('display-none');
-        parent.classList
-      };
-      // comp_btn.classList.remove('success');
+      const confirmed = deleteTask(id);
+      if (confirmed) parent.remove();
     }
   }
-}
-)
-(tasks);
-// const titl = document.querySelector('#title'); 
-// const bod = document.querySelector('#body');
-// const btnAdd = document.querySelector('.btn .btn-primary .mt-4');
-// btnAdd.addEventListener('click',function(){
-//   const titles = titl.value;
-//   const bodys = bod.value;
-//   const newObj = {
-//     body: bodys,
-//     title: titles,
-//   };
-//   [...rest, newObj] = tasks;
-//   console.log(tasks)
-// })
+  function filterTodos({ target }) {
+    
+  }
+})(tasks);

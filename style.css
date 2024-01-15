@@ -1,0 +1,11 @@
+:root {
+    --bg-red: rgb(0, 255, 4);
+}
+.class1 {
+    background: var(--bg-red);
+}
+.class2 {
+    background: var(--bg-red);
+}
+/* DOM: css var in js
+DOM: localStorage, sessionStorage */
