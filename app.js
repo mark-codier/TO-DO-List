@@ -210,14 +210,16 @@ const tasks = [
     const selectedValue = selectedTheme.value;
     const isConfirm = confirm(`Вы дейст хотите выбрать тему ${selectedValue}`);
     if(!isConfirm) {
-      selectedValue = lastSelectedTheme;
+      selectedTheme.value = lastSelectedTheme;
       return;
     };
     setTheme(selectedValue);
   }
   function setTheme(name) {
     const selectedThemeObj = themes[name];
+
     Object.entries(selectedThemeObj).forEach(([key, value]) => {
+      console.log(key, value);
       document.documentElement.style.setProperty(key, value);
     });
   }
