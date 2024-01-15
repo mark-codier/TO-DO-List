@@ -154,7 +154,10 @@ function renderAllTasks(objOfTasks){
       if(confirmValue){parent.remove()}
     }else if(target.classList.contains('comp')){
       const parent = target.parentElement;
-      parent.classList.add('--bs-success-bg-subtle','completed');
+      parent.classList.add('--bs-success-bg-subtle','completed')
+      if(parent.classList.contains('systemActive')){
+        parent.classList.add('display-none');
+      }
     }};
   })(tasks);
 // const titl = document.querySelector('#title'); 
