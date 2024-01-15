@@ -45,30 +45,40 @@ const tasks = [
 form.addEventListener('submit',onSubmitHandler)
 // map filter find foreach reduce some/every//Закрепить////////////////////////////////////////////////////////////////
 listContainer.addEventListener('click',onDeleteHandler);
+//////////////////////////////////////////Создаю интерфейс для задач///////////////////////////////////////////////////////////////////////
+const divid = document.createElement('div');
+divid.classList.add('divid')
 const btn1 = document.createElement('button');
-btn1.textContent = "Показать все задачи";
-btn1.classList.add('btn-primary','btn','ml-auto');
-btn1.addEventListener('click',function(){
-  const all = document.querySelectorAll('.completed');
-  all.forEach(el => {el.classList.remove('display-none')})
-  div.textContent = 'все задачи'
-})
 const btn2 = document.createElement('button');
-btn2.textContent = "Показать незавершенные задачи";
-btn2.classList.add('btn-primary','btn','ml-auto');
-btn2.addEventListener('click',function(){
-  const alle = document.querySelectorAll('.completed');
-  alle.forEach(el => {el.classList.add('display-none')})
-  div.textContent = 'Незавершенные задачи'
-});
 const div = document.createElement('div');
-div.classList.add('div','ml-auto','btn-secondary');
-div.textContent = 'Все задачи';
-listContainer.appendChild(btn1);
-listContainer.appendChild(btn2);
-listContainer.appendChild(div)
-renderAllTasks(objOfTasks);
-function listItemTemplate ({_id,title,body}){
+    btn1.textContent = "Показать все задачи";
+    btn2.textContent = "Показать незавершенные задачи";
+    btn1.classList.add('btn-primary','btn','ml-auto');
+    btn2.classList.add('btn-primary','btn','ml-auto');
+    div.classList.add('div','ml-auto',);
+    div.textContent = 'Все задачи';
+    divid.appendChild(btn1);
+    divid.appendChild(btn2);
+    divid.appendChild(div);
+    listContainer.appendChild(divid);
+    const listContainer1 = listContainer.children;
+    console.log(listContainer1  )
+btn1.addEventListener('click',function(){
+  div.textContent = 'все задачи';
+    listContainer1.forEach(e => {
+    e.classlist.contains('systemActivated') ? e.classList.remove('systemActivated'):console.log();
+    e.classList.contains('display-none') ? e.classList.remove('display-none'):console.log();
+  });
+})
+btn2.addEventListener('click',function(){
+  div.textContent = 'Незавершенные задачи';
+  listContainer1.forEach(e => {e.classList.add('systemActivated');
+  if(e.classList.contains('systemActivated') && e.classList.contains('completed')){
+    e.classList.add('display-none');
+  }});
+});
+    renderAllTasks(objOfTasks);
+  function listItemTemplate ({_id,title,body}){
     const listItem = document.createElement('li');
     listItem.classList.add('list-group-item','d-flex', 'align-items-center', 'flex-wrap','mt-2');
     listItem.setAttribute('data-task-id',_id);
@@ -144,18 +154,9 @@ function renderAllTasks(objOfTasks){
       if(confirmValue){parent.remove()}
     }else if(target.classList.contains('comp')){
       const parent = target.parentElement;
-      console.log(parent);
-      parent.classList.toggle('completed');
-      if(parent.classList.contains('completed')){
-        parent.classList.add('display-none');
-        parent.classList
-      };
-      // comp_btn.classList.remove('success');
-    }
-  }
-}
-)
-(tasks);
+      parent.classList.add('--bs-success-bg-subtle','completed');
+    }};
+  })(tasks);
 // const titl = document.querySelector('#title'); 
 // const bod = document.querySelector('#body');
 // const btnAdd = document.querySelector('.btn .btn-primary .mt-4');
