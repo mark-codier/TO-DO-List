@@ -116,21 +116,22 @@ const tasks = [
   const inputTitle = form.elements['title'];
   const inputBody = form.elements['body'];
   const selectedTheme = document.getElementById('themeSelect');
-  const filterContainer = document.querySelector('.filterContainer');
-
+  const noTasksContainer = document.getElementById('NoTasksContainer');
   //events
   renderAllTasks(objOfTasks);
   form.addEventListener('submit', onSubmitHandler);
   listContainer.addEventListener('click', onDeleteHandler);
   selectedTheme.addEventListener('change', onThemeChangeHandler);
-  // filterContainer.addEventListener('click', filterTodos);
-
-
+  ///////
   function renderAllTasks(objOfTasks) {
-    if (!objOfTasks) {
-      console.error('НЕТ ЗАДАЧ');
+    if (Object.keys(objOfTasks).length===0){
+      noTasksContainer.style.display = 'block';
+      listContainer.style.display = 'none';
       return;
-    }; //проверка
+    }else{
+      noTasksContainer.style.display = 'none';
+      listContainer.style.display = 'block';
+    }
     const fragment = document.createDocumentFragment();
     Object.values(objOfTasks).forEach(task => {
       const list = listItemTemplate(task);  
