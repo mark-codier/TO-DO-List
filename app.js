@@ -198,14 +198,6 @@ const tasks = [
       if (confirmed) parent.remove();
     }
   }
-  // function filterTodos({ target }) {
-  //   if(target.classList.contains('btn-primary')) {
-  //     const filteredTasks = tasks.filter(task=>{
-  //       return task.completed;
-  //     });
-  //     return filteredTasks;
-  //   }
-  // }
   function onThemeChangeHandler(e) {
     const selectedValue = selectedTheme.value;
     const isConfirm = confirm(`Вы дейст хотите выбрать тему ${selectedValue}`);
